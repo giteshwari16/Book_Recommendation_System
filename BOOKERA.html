@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BOOKERA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1e293b;
+      --secondary: #38bdf8;
+      --accent: #f472b6;
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      --glass: rgba(30,41,59,0.85);
+      --danger: #ef4444;
+      --success: #22d3ee;
+      --text: #f1f5f9;
+      --muted: #64748b;
+      --table-header: #334155;
+      --table-row: #1e293b;
+      --table-alt: #273449;
+    }
+    body {
+      font-family: 'Montserrat', Arial, sans-serif;
+      background: var(--bg-gradient), url('https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1500&q=80') no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      color: var(--text);
+      min-height: 100vh;
+      transition: background 0.7s;
+      position: relative;
+    }
+    body:before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15,23,42,0.82);
+      z-index: 0;
+      pointer-events: none;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+      position: relative;
+      z-index: 1;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 1rem 0.5rem 1rem;
+      background: linear-gradient(90deg, var(--accent) 0%, var(--secondary) 100%);
+      border-radius: 0 0 1.5rem 1.5rem;
+      box-shadow: 0 2px 16px #0ea5e922;
+      margin-bottom: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    header h1 {
+      color: #fff;
+      font-size: 2.2rem;
+      letter-spacing: 2px;
+      margin: 0;
+      text-shadow: 0 2px 12px #0ea5e9aa;
+      animation: fadeInDown 1s;
+      font-weight: 900;
+      letter-spacing: 3px;
+    }
+    .login-btn {
+      background: linear-gradient(90deg, var(--secondary), var(--accent));
+      color: #fff;
+      border: none;
+      border-radius: 0.7em;
+      padding: 0.7em 1.5em;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 2px 8px #0ea5e944;
+      transition: background 0.3s, transform 0.2s;
+      outline: none;
+    }
+    .login-btn:hover {
+      background: linear-gradient(90deg, var(--accent), var(--secondary));
+      transform: scale(1.05);
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-40px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--secondary);
+      margin-bottom: 1rem;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 12px #0ea5e922;
+    }
+    .search-section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 2.5rem;
+      background: var(--glass);
+      border-radius: 1rem;
+      box-shadow: 0 2px 16px #0ea5e922;
+      padding: 1.2rem 1rem;
+      animation: fadeIn 1.2s;
+      position: relative;
+    }
+    .search-icon {
+      display: flex;
+      align-items: center;
+      margin-right: 0.5em;
+      color: var(--secondary);
+      font-size: 1.5em;
+      background: none;
+      border: none;
+      outline: none;
+      padding: 0;
+      height: 2.5em;
+    }
+    .search-section input, .search-section select {
+      padding: 0.7em 1em;
+      border-radius: 0.7em;
+      border: 1px solid var(--table-header);
+      font-size: 1rem;
+      outline: none;
+      transition: border 0.2s;
+      background: #0f172a;
+      color: var(--text);
+      margin-right: 0.5em;
+    }
+    .search-section input:focus, .search-section select:focus {
+      border: 1.5px solid var(--secondary);
+    }
+    .search-section button {
+      background: linear-gradient(90deg, var(--secondary), var(--accent));
+      color: #fff;
+      border: none;
+      border-radius: 0.7em;
+      padding: 0.7em 1.5em;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 2px 8px #0ea5e944;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .search-section button:hover {
+      background: linear-gradient(90deg, var(--accent), var(--secondary));
+      transform: scale(1.05);
+    }
+    .book-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
+      animation: fadeIn 1.2s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .book-card {
+      background: var(--glass);
+      border-radius: 1rem;
+      box-shadow: 0 2px 16px #0ea5e922, 0 2px 12px #f472b6aa;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.25s cubic-bezier(.4,2,.3,1), box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+      animation: popIn 0.7s;
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.95);}
+      to { opacity: 1; transform: scale(1);}
+    }
+    .book-card:hover {
+      transform: translateY(-8px) scale(1.04) rotate(-1deg);
+      box-shadow: 0 8px 32px 0 var(--secondary), 0 2px 12px var(--accent);
+      z-index: 2;
+    }
+    .book-cover {
+      width: 110px;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 0.5rem;
+      box-shadow: 0 2px 8px #0ea5e944;
+      margin-bottom: 1rem;
+      background: #1e293b;
+      transition: box-shadow 0.3s;
+    }
+    .book-card:hover .book-cover {
+      box-shadow: 0 8px 32px var(--secondary);
+    }
+    .book-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
+    .book-author {
+      font-size: 1rem;
+      color: var(--secondary);
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      text-align: center;
+    }
+    .book-categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 0.7rem;
+      justify-content: center;
+    }
+    .category-badge {
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 0.5em;
+      padding: 0.2em 0.7em;
+      box-shadow: 0 1px 4px #f472b644;
+      margin-bottom: 0.2em;
+      transition: background 0.2s;
+    }
+    .book-desc {
+      font-size: 0.97rem;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+    .book-card .rating {
+      display: flex;
+      align-items: center;
+      gap: 0.2em;
+      margin-bottom: 0.5em;
+      font-size: 1.1em;
+      color: var(--secondary);
+      font-weight: 700;
+      letter-spacing: 1px;
+      animation: fadeIn 1.2s;
+    }
+    .book-card .rating .star {
+      color: var(--secondary);
+      font-size: 1.1em;
+      margin-right: 2px;
+    }
+    .add-watchlist {
+      background: linear-gradient(90deg, var(--secondary), var(--accent));
+      color: #fff;
+      border: none;
+      border-radius: 0.7em;
+      padding: 0.4em 1em;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      margin-top: 0.5em;
+      margin-bottom: 0.2em;
+      box-shadow: 0 2px 8px #0ea5e944;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .add-watchlist.added {
+      background: linear-gradient(90deg, var(--success), var(--secondary));
+      color: #fff;
+      cursor: default;
+    }
+    .add-watchlist:hover:not(.added) {
+      background: linear-gradient(90deg, var(--accent), var(--secondary));
+      transform: scale(1.05);
+    }
+    .top4-panel {
+      background: linear-gradient(90deg, var(--secondary) 0%, var(--accent) 100%);
+      border-radius: 1rem;
+      box-shadow: 0 2px 16px #0ea5e922;
+      padding: 1.2rem 1rem;
+      margin-bottom: 2rem;
+      color: #fff;
+      animation: fadeIn 1.2s;
+    }
+    .top4-panel h2 {
+      margin: 0 0 0.7em 0;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .top4-list {
+      display: flex;
+      gap: 1.2em;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      align-items: center;
+    }
+    .top4-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: var(--glass);
+      border-radius: 0.7em;
+      padding: 0.7em 1em;
+      box-shadow: 0 2px 8px #0ea5e944;
+      min-width: 120px;
+      transition: transform 0.2s;
+    }
+    .top4-item:hover {
+      transform: scale(1.07) rotate(-2deg);
+      background: var(--secondary);
+      color: #fff;
+    }
+    .fact-section {
+      background: linear-gradient(90deg, var(--accent) 0%, var(--secondary) 100%);
+      color: #fff;
+      border-radius: 1rem;
+      box-shadow: 0 2px 16px #0ea5e922;
+      padding: 1.2rem 1rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      animation: fadeIn 1.2s;
+      gap: 1em;
+    }
+    .fact-section span {
+      font-size: 1.1rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+    .fact-section button {
+      background: #fff;
+      color: var(--secondary);
+      border: none;
+      border-radius: 0.7em;
+      padding: 0.5em 1.2em;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 2px 8px #0ea5e944;
+      transition: background 0.3s, color 0.2s;
+    }
+    .fact-section button:hover {
+      background: var(--secondary);
+      color: #fff;
+    }
+    /* Watchlist Table */
+    .watchlist-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--glass);
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 2px 16px #0ea5e922;
+      margin-bottom: 2rem;
+      animation: fadeIn 1.2s;
+    }
+    .watchlist-table th, .watchlist-table td {
+      padding: 0.8em 0.5em;
+      text-align: left;
+    }
+    .watchlist-table th {
+      background: var(--table-header);
+      color: var(--secondary);
+      font-weight: 700;
+      font-size: 1.05em;
+    }
+    .watchlist-table tr {
+      background: var(--table-row);
+      border-bottom: 1px solid var(--table-header);
+      transition: background 0.2s;
+    }
+    .watchlist-table tr:nth-child(even) {
+      background: var(--table-alt);
+    }
+    .watchlist-table tr:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+    .watchlist-table img {
+      width: 40px;
+      height: 60px;
+      border-radius: 0.3em;
+      object-fit: cover;
+      box-shadow: 0 2px 8px #0ea5e944;
+    }
+    /* Login Modal */
+    .modal-bg {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(56,189,248,0.18);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.5s;
+    }
+    .login-modal {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 100%);
+      border-radius: 1.2rem;
+      box-shadow: 0 8px 32px #0ea5e9aa;
+      padding: 2.2rem 2rem 1.5rem 2rem;
+      min-width: 320px;
+      max-width: 90vw;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: popIn 0.7s;
+      position: relative;
+    }
+    .login-modal h2 {
+      margin: 0 0 1.2em 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .login-modal input {
+      width: 100%;
+      padding: 0.7em 1em;
+      border-radius: 0.7em;
+      border: none;
+      font-size: 1rem;
+      margin-bottom: 1em;
+      outline: none;
+      background: #1e293b;
+      color: #fff;
+      box-shadow: 0 2px 8px #0ea5e944;
+      transition: box-shadow 0.2s;
+    }
+    .login-modal input:focus {
+      box-shadow: 0 2px 16px #0ea5e944;
+    }
+    .login-modal button {
+      background: #fff;
+      color: var(--secondary);
+      border: none;
+      border-radius: 0.7em;
+      padding: 0.7em 1.5em;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 2px 8px #0ea5e944;
+      transition: background 0.3s, color 0.2s;
+      margin-top: 0.5em;
+    }
+    .login-modal button:hover {
+      background: var(--secondary);
+      color: #fff;
+    }
+    .close-modal {
+      position: absolute;
+      top: 1em;
+      right: 1em;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.5em;
+      cursor: pointer;
+      font-weight: bold;
+      transition: color 0.2s;
+    }
+    .close-modal:hover {
+      color: #18181b;
+    }
+    .login-error {
+      color: var(--danger);
+      font-size: 0.95em;
+      margin-bottom: 0.5em;
+      text-align: center;
+    }
+    .login-success {
+      color: var(--success);
+      font-size: 0.95em;
+      margin-bottom: 0.5em;
+      text-align: center;
+    }
+    .watchlist-btn {
+      background: linear-gradient(90deg, var(--secondary), var(--accent));
+      color: #fff;
+      border: none;
+      border-radius: 0.7em;
+      padding: 0.7em 1.5em;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 2px 8px #0ea5e944;
+      transition: background 0.3s, transform 0.2s;
+      outline: none;
+      margin-right: 0.7em;
+    }
+    .watchlist-btn:hover {
+      background: linear-gradient(90deg, var(--accent), var(--secondary));
+      transform: scale(1.05);
+    }
+    @media (max-width: 700px) {
+      .container {
+        padding: 1rem 0.2rem;
+      }
+      header {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 0.7rem 0.3rem 0.3rem 0.3rem;
+        border-radius: 0 0 1rem 1rem;
+      }
+      header h1 {
+        font-size: 1.3rem;
+      }
+      .section-title {
+        font-size: 1.1rem;
+      }
+      .search-section {
+        flex-direction: column;
+        gap: 0.7rem;
+        padding: 0.7rem 0.3rem;
+      }
+      .book-grid {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 1rem;
+      }
+      .book-card {
+        padding: 0.7rem;
+      }
+      .top4-panel, .fact-section {
+        padding: 0.7rem 0.3rem;
+      }
+      .watchlist-table th, .watchlist-table td {
+        padding: 0.5em 0.2em;
+        font-size: 0.95em;
+      }
+      .watchlist-table img {
+        width: 28px;
+        height: 40px;
+      }
+      .login-modal, #review-publish-form {
+        min-width: unset;
+        padding: 1.2em 0.5em 1em 0.5em;
+        max-width: 98vw;
+      }
+      #review-publish-form, .review-form {
+        max-width: 98vw !important;
+      }
+      #watchlist-modal > div {
+        max-width: 99vw !important;
+        padding: 1em 0.2em 1em 0.2em !important;
+      }
+      #watchlist-modal table {
+        font-size: 0.95em;
+      }
+      #watchlist-modal .section-title {
+        font-size: 1.1rem;
+      }
+      #publish-reviews-fixed-btn {
+        right: 10px;
+        bottom: 10px;
+        padding: 0.7em 1.2em;
+        font-size: 1em;
+      }
+    }
+    @media (max-width: 400px) {
+      .book-card {
+        padding: 0.3rem;
+      }
+      .book-title, .book-author {
+        font-size: 0.95rem;
+      }
+      .category-badge {
+        font-size: 0.7rem;
+        padding: 0.1em 0.4em;
+      }
+      .watchlist-table th, .watchlist-table td {
+        font-size: 0.85em;
+      }
+    }
+    /* Touch-friendly buttons */
+    button, input, select, textarea {
+      touch-action: manipulation;
+      font-family: inherit;
+    }
+    /* Hide scrollbars for modals on mobile */
+    #watchlist-modal, #review-publish-page {
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div style="display:flex;align-items:center;gap:0.7em;">
+      <!-- BOOKERA SVG Logo -->
+      <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" style="background:none;">
+        <rect x="4" y="8" width="28" height="28" rx="6" fill="#38bdf8"/>
+        <rect x="12" y="4" width="28" height="28" rx="6" fill="#f472b6"/>
+        <rect x="8" y="12" width="28" height="28" rx="6" fill="#fff"/>
+        <rect x="12" y="16" width="20" height="4" rx="2" fill="#38bdf8"/>
+        <rect x="12" y="22" width="16" height="4" rx="2" fill="#f472b6"/>
+        <rect x="12" y="28" width="12" height="4" rx="2" fill="#1e293b"/>
+        <rect x="18" y="10" width="8" height="2" rx="1" fill="#1e293b"/>
+      </svg>
+      <h1 style="margin:0;">BOOKERA</h1>
+    </div>
+    <div style="display:flex;align-items:center;gap:0.7em;">
+      <button class="login-btn" id="login-btn" onclick="handleLoginLogout()">Login</button>
+      <button class="watchlist-btn" id="watchlist-btn">Watchlist</button>
+    </div>
+  </header>
+  <div class="container" id="container">
+    <!-- Book Facts Section -->
+    <div class="fact-section">
+      <span id="book-fact">Books can increase your lifespan by up to 2 years if you read regularly!</span>
+      <button onclick="nextFact()">Next Fact</button>
+    </div>
+    <!-- Top 4 Most Read Books Panel -->
+    <div class="top4-panel">
+      <h2>Top 4 Most Read Books</h2>
+      <div class="top4-list" id="top4-list">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+    <!-- Search Section -->
+    <div class="search-section">
+      <span class="search-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M6 4v2M18 4v2M3 8h18M4 19h16a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1Zm5-4h6" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="3" width="20" height="18" rx="2" stroke="#38bdf8" stroke-width="2"/></svg>
+      </span>
+      <input id="search-title" type="text" placeholder="Search by Title" oninput="filterBooks()">
+      <input id="search-author" type="text" placeholder="Search by Author" oninput="filterBooks()">
+      <select id="search-category" onchange="filterBooks()">
+        <option value="">All Categories</option>
+        <option>Self-Help</option>
+        <option>Productivity</option>
+        <option>Fiction</option>
+        <option>Adventure</option>
+        <option>Classic</option>
+        <option>Drama</option>
+        <option>Fantasy</option>
+        <option>Young Adult</option>
+        <option>Spirituality</option>
+        <option>Mindfulness</option>
+        <option>History</option>
+        <option>Non-Fiction</option>
+        <option>Motivation</option>
+        <option>Dystopian</option>
+        <option>Business</option>
+        <option>Entrepreneurship</option>
+        <option>Finance</option>
+        <option>Personal Growth</option>
+        <option>Science</option>
+        <option>Psychology</option>
+      </select>
+      <button onclick="filterBooks()">Search</button>
+    </div>
+    <!-- Main Book Collection -->
+    <div>
+      <div class="section-title">Book Collection</div>
+      <div class="book-grid" id="main-book-grid"></div>
+    </div>
+    <!-- Trending Books -->
+    <div>
+      <div class="section-title">Trending Books</div>
+      <div class="book-grid" id="trending-book-grid"></div>
+    </div>
+    <!-- Published Reviews Section (hidden by default, shown below trending books) -->
+    <div id="published-reviews-section" style="margin-top:2em;">
+      <div class="section-title">Published Reviews</div>
+      <div id="published-reviews-list" style="display: flex; flex-direction: column; gap: 1.5em;"></div>
+    </div>
+    <!-- Review Form Page (hidden by default) -->
+    <div id="review-form-page" style="display:none; margin-top:2em;">
+      <div class="section-title">Write Your Own Review and Rate the Book</div>
+      <form id="review-form" class="review-form" style="background:var(--glass);padding:2em 1em;border-radius:1em;max-width:500px;margin:auto;box-shadow:0 2px 16px #0ea5e922;display:flex;flex-direction:column;gap:1em;">
+        <input type="text" id="review-book-name" placeholder="Book Name" required style="padding:0.7em 1em;border-radius:0.7em;border:1px solid var(--table-header);font-size:1rem;">
+        <input type="text" id="review-author" placeholder="Author" required style="padding:0.7em 1em;border-radius:0.7em;border:1px solid var(--table-header);font-size:1rem;">
+        <select id="review-category" required style="padding:0.7em 1em;border-radius:0.7em;border:1px solid var(--table-header);font-size:1rem;">
+          <option value="">Select Category</option>
+        </select>
+        <textarea id="review-views" placeholder="Your Views" rows="4" required style="padding:0.7em 1em;border-radius:0.7em;border:1px solid var(--table-header);font-size:1rem;"></textarea>
+        <select id="review-rating" required style="padding:0.7em 1em;border-radius:0.7em;border:1px solid var(--table-header);font-size:1rem;">
+          <option value="">Rate the Book</option>
+          <option value="1">1 Star</option>
+          <option value="2">2 Stars</option>
+          <option value="3">3 Stars</option>
+          <option value="4">4 Stars</option>
+          <option value="5">5 Stars</option>
+        </select>
+        <button type="submit" style="background:linear-gradient(90deg,var(--secondary),var(--accent));color:#fff;border:none;border-radius:0.7em;padding:0.7em 1.5em;font-weight:700;font-size:1rem;cursor:pointer;box-shadow:0 2px 8px #0ea5e944;">Publish Review</button>
+        <button type="button" id="cancel-review-btn" style="background:var(--danger);color:#fff;border:none;border-radius:0.7em;padding:0.7em 1.5em;font-weight:700;font-size:1rem;cursor:pointer;box-shadow:0 2px 8px #0ea5e944;">Cancel</button>
+      </form>
+    </div>
+    <!-- Watchlist Modal Page -->
+    <div id="watchlist-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(15,23,42,0.97);z-index:3000;overflow:auto;align-items:center;justify-content:center;">
+      <div style="background:linear-gradient(135deg,var(--accent) 0%,var(--secondary) 100%);margin:3em auto 0 auto;max-width:900px;width:95vw;padding:2.5em 2em 2em 2em;border-radius:1.2em;box-shadow:0 8px 32px #0ea5e9aa;display:flex;flex-direction:column;gap:1.2em;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1em;">
+          <div class="section-title" style="margin:0;">My Watchlist</div>
+          <button id="close-watchlist-modal" style="background:var(--danger);color:#fff;border:none;border-radius:0.7em;padding:0.5em 1.2em;font-weight:700;font-size:1rem;cursor:pointer;box-shadow:0 2px 8px #0ea5e944;">Close</button>
+        </div>
+        <table class="watchlist-table" id="watchlist-table-modal">
+          <thead>
+            <tr>
+              <th>Cover</th>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Categories</th>
+              <th>Rating</th>
+              <th>Remove</th>
+            </tr>
+          </thead>
+          <tbody id="watchlist-tbody-modal">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!-- Footer with Nav Bar -->
+  <footer style="background:linear-gradient(90deg,var(--accent),var(--secondary));color:#fff;padding:1.2em 0;text-align:center;position:relative;z-index:10;margin-top:2em;">
+    <nav>
+      <button id="write-review-nav" style="background:#fff;color:var(--secondary);border:none;border-radius:0.7em;padding:0.7em 1.5em;font-weight:700;font-size:1rem;cursor:pointer;box-shadow:0 2px 8px #0ea5e944;transition:background 0.3s, color 0.2s;">Write Your Own Review and Rate the Book</button>
+    </nav>
+    <div style="margin-top:0.7em;font-size:0.95em;opacity:0.8;">&copy; 2025 BOOKERA. All rights reserved.</div>
+    <!-- Fixed Publish Reviews Button -->
+    <button id="publish-reviews-fixed-btn" style="position:fixed;bottom:24px;right:32px;z-index:2001;background:linear-gradient(90deg,var(--secondary),var(--accent));color:#fff;border:none;border-radius:2em;padding:1em 2em;font-weight:700;font-size:1.1rem;box-shadow:0 4px 24px #0ea5e944;cursor:pointer;transition:background 0.3s,transform 0.2s;">Publish Reviews</button>
+  </footer>
+  <!-- Login Modal -->
+  <div id="login-modal-bg" class="modal-bg" style="display:none;">
+    <form class="login-modal" onsubmit="return loginUser(event)">
+      <button type="button" class="close-modal" onclick="hideLoginModal()">&times;</button>
+      <h2>Login</h2>
+      <div id="login-message"></div>
+      <input id="login-username" type="text" placeholder="Username" required>
+      <input id="login-password" type="password" placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
+  </div>
+  <!-- Review Publish Page (hidden by default) -->
+  <div id="review-publish-page" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(15,23,42,0.97);z-index:3000;overflow:auto;align-items:center;justify-content:center;">
+    <form id="review-publish-form" style="background:linear-gradient(135deg,var(--accent) 0%,var(--secondary) 100%);margin:3em auto 0 auto;max-width:420px;width:90vw;padding:2.5em 2em 2em 2em;border-radius:1.2em;box-shadow:0 8px 32px #0ea5e9aa;display:flex;flex-direction:column;gap:1.2em;">
+      <h2 style="color:#fff;text-align:center;margin-bottom:0.5em;">Review Publish Page</h2>
+      <label for="pub-book-name" style="color:#fff;font-weight:600;">Book Name</label>
+      <input id="pub-book-name" type="text" required style="padding:0.7em 1em;border-radius:0.7em;border:none;font-size:1rem;background:#1e293b;color:#fff;">
+      <label for="pub-author-name" style="color:#fff;font-weight:600;">Author Name</label>
+      <input id="pub-author-name" type="text" required style="padding:0.7em 1em;border-radius:0.7em;border:none;font-size:1rem;background:#1e293b;color:#fff;">
+      <label style="color:#fff;font-weight:600;">Rate the Book</label>
+      <div id="pub-rating-group" style="display:flex;gap:0.7em;align-items:center;">
+        <input type="radio" id="star1" name="pub-rating" value="1" required><label for="star1" style="color:#fff;">1★</label>
+        <input type="radio" id="star2" name="pub-rating" value="2"><label for="star2" style="color:#fff;">2★</label>
+        <input type="radio" id="star3" name="pub-rating" value="3"><label for="star3" style="color:#fff;">3★</label>
+        <input type="radio" id="star4" name="pub-rating" value="4"><label for="star4" style="color:#fff;">4★</label>
+        <input type="radio" id="star5" name="pub-rating" value="5"><label for="star5" style="color:#fff;">5★</label>
+      </div>
+      <label for="pub-views" style="color:#fff;font-weight:600;">Your Views</label>
+      <textarea id="pub-views" rows="4" required style="padding:0.7em 1em;border-radius:0.7em;border:none;font-size:1rem;background:#1e293b;color:#fff;"></textarea>
+      <div style="display:flex;gap:1em;justify-content:center;margin-top:1em;">
+        <button type="submit" style="background:var(--success);color:#fff;border:none;border-radius:0.7em;padding:0.7em 1.5em;font-weight:700;font-size:1rem;cursor:pointer;box-shadow:0 2px 8px #0ea5e944;">Publish</button>
+        <button type="button" id="pub-cancel-btn" style="background:var(--danger);color:#fff;border:none;border-radius:0.7em;padding:0.7em 1.5em;font-weight:700;font-size:1rem;cursor:pointer;box-shadow:0 2px 8px #0ea5e944;">Cancel</button>
+      </div>
+      <div id="pub-review-result" style="margin-top:1.5em;"></div>
+    </form>
+  </div>
+  <script>
+    // Book Data
+    const books = [
+      // Main Collection (8)
+      {
+        id: 1, title: "Atomic Habits", author: "James Clear", cover: "https://covers.openlibrary.org/b/id/10594765-L.jpg",
+        categories: ["Self-Help", "Productivity"], rating: 4.8, desc: "A proven framework for improving every day. Learn how tiny changes can lead to remarkable results.", reads: 1200
+      },
+      {
+        id: 2, title: "The Alchemist", author: "Paulo Coelho", cover: "https://covers.openlibrary.org/b/id/8231856-L.jpg",
+        categories: ["Fiction", "Adventure"], rating: 4.7, desc: "A magical story about following your dreams and listening to your heart, set in the deserts of Egypt.", reads: 1100
+      },
+      {
+        id: 3, title: "To Kill a Mockingbird", author: "Harper Lee", cover: "https://covers.openlibrary.org/b/id/8228691-L.jpg",
+        categories: ["Classic", "Drama"], rating: 4.9, desc: "A timeless novel of growing up and the human dignity that unites us all, set in the American South.", reads: 1300
+      },
+      {
+        id: 4, title: "Harry Potter and the Sorcerer's Stone", author: "J.K. Rowling", cover: "https://covers.openlibrary.org/b/id/7984916-L.jpg",
+        categories: ["Fantasy", "Young Adult"], rating: 4.8, desc: "The first book in the beloved Harry Potter series, where a young wizard discovers his magical heritage.", reads: 2000
+      },
+      {
+        id: 5, title: "The Power of Now", author: "Eckhart Tolle", cover: "https://covers.openlibrary.org/b/id/11153223-L.jpg",
+        categories: ["Spirituality", "Mindfulness"], rating: 4.6, desc: "A guide to spiritual enlightenment, teaching the importance of living in the present moment.", reads: 900
+      },
+      {
+        id: 6, title: "Pride and Prejudice", author: "Jane Austen", cover: "https://covers.openlibrary.org/b/id/8226191-L.jpg",
+        categories: ["Classic", "Drama"], rating: 4.8, desc: "A romantic novel that charts the emotional development of the protagonist Elizabeth Bennet.", reads: 1250
+      },
+      {
+        id: 7, title: "The Hobbit", author: "J.R.R. Tolkien", cover: "https://covers.openlibrary.org/b/id/6979861-L.jpg",
+        categories: ["Fantasy", "Adventure"], rating: 4.9, desc: "Bilbo Baggins embarks on a quest to reclaim the lost Dwarf Kingdom of Erebor.", reads: 1400
+      },
+      {
+        id: 8, title: "Man's Search for Meaning", author: "Viktor E. Frankl", cover: "https://covers.openlibrary.org/b/id/11153222-L.jpg",
+        categories: ["Non-Fiction", "Spirituality"], rating: 4.7, desc: "A memoir by Viktor Frankl chronicling his experiences as a Holocaust survivor.", reads: 950
+      },
+      // Trending (8)
+      {
+        id: 9, title: "Sapiens: A Brief History of Humankind", author: "Yuval Noah Harari", cover: "https://images-na.ssl-images-amazon.com/images/I/81WcnNQ-TBL.jpg",
+        categories: ["History", "Non-Fiction"], rating: 4.7, desc: "A thought-provoking journey through the history of our species, from ancient ancestors to the present.", reads: 1700
+      },
+      {
+        id: 10, title: "The Subtle Art of Not Giving a F*ck", author: "Mark Manson", cover: "https://images-na.ssl-images-amazon.com/images/I/81l3rZK4lnL.jpg",
+        categories: ["Self-Help", "Motivation"], rating: 4.5, desc: "A counterintuitive approach to living a good life, focusing on what truly matters.", reads: 1400
+      },
+      {
+        id: 11, title: "1984", author: "George Orwell", cover: "https://images-na.ssl-images-amazon.com/images/I/91SZSW8qSsL.jpg",
+        categories: ["Dystopian", "Classic"], rating: 4.8, desc: "A chilling prophecy about the future, where Big Brother watches and freedom is an illusion.", reads: 2100
+      },
+      // Adding two new books for trending
+      {
+        id: 12, title: "The Power of Habit", author: "Charles Duhigg", cover: "https://covers.openlibrary.org/b/id/7795514-L.jpg",
+        categories: ["Self-Help", "Productivity", "Business"], rating: 4.6, desc: "Explores the science behind why we have habits and how they can be changed.", reads: 1800
+      },
+      {
+        id: 13, title: "Rich Dad Poor Dad", author: "Robert T. Kiyosaki", cover: "https://images-na.ssl-images-amazon.com/images/I/81vpsIs58WL.jpg",
+        categories: ["Finance", "Personal Growth"], rating: 4.7, desc: "What the rich teach their kids about money that the poor and middle class do not.", reads: 1600
+      },
+      // Adding second book for trending
+      {
+        id: 17, title: "The 4-Hour Workweek", author: "Timothy Ferriss", cover: "https://covers.openlibrary.org/b/id/9431803-L.jpg",
+        categories: ["Business", "Productivity", "Self-Help"], rating: 4.5, desc: "A guide to escaping the 9-5, living anywhere, and joining the new rich.", reads: 1550
+      },
+      // Watchlist (5)
+      {
+        id: 14, title: "Thinking, Fast and Slow", author: "Daniel Kahneman", cover: "https://images-na.ssl-images-amazon.com/images/I/81wgcld4wxL.jpg",
+        categories: ["Science", "Psychology"], rating: 4.6, desc: "A groundbreaking tour of the mind and an explanation of the two systems that drive the way we think.", reads: 1000
+      },
+      {
+        id: 15, title: "The 7 Habits of Highly Effective People", author: "Stephen R. Covey", cover: "https://images-na.ssl-images-amazon.com/images/I/91cwOSS4sDL.jpg",
+        categories: ["Self-Help", "Productivity"], rating: 4.8, desc: "A classic guide to personal and professional effectiveness, with timeless principles for success.", reads: 1500
+      },
+      {
+        id: 16, title: "Educated", author: "Tara Westover", cover: "https://images-na.ssl-images-amazon.com/images/I/81WojUxbbFL.jpg",
+        categories: ["Biography", "Non-Fiction"], rating: 4.7, desc: "A memoir about a woman who grows up in a strict and abusive household in rural Idaho but eventually escapes to learn about the wider world through education.", reads: 900
+      },
+      {
+        id: 22, title: "The Brain That Changes Itself", author: "Norman Doidge", cover: "https://images-na.ssl-images-amazon.com/images/I/81WcnNQ-TBL.jpg", categories: ["Science", "Psychology"], rating: 4.7, desc: "Stories of the brain's ability to rewire and adapt, revolutionizing our understanding of neuroplasticity.", reads: 1250
+      },
+      {
+        id: 23, title: "Behave: The Biology of Humans at Our Best and Worst", author: "Robert Sapolsky", cover: "https://images-na.ssl-images-amazon.com/images/I/91SZSW8qSsL.jpg", categories: ["Science", "Psychology"], rating: 4.8, desc: "A sweeping tour through the science of human behavior, from neurons to societies.", reads: 1300
+      },
+      {
+        id: 24, title: "Thinking Like a Scientist", author: "Susan Carey", cover: "https://images-na.ssl-images-amazon.com/images/I/81wgcld4wxL.jpg", categories: ["Science", "Psychology"], rating: 4.6, desc: "How scientific thinking develops in the mind, blending psychology and science education.", reads: 1100
+      },
+      // Additional books added for categories with less than 2 entries
+      {
+        id: 25, title: "Young Adult Book 1", author: "Author Young Adult", cover: "https://covers.openlibrary.org/b/id/8321417-L.jpg", categories: ["Young Adult"], rating: 4.0, desc: "A recommended book for the Young Adult category.", reads: 500
+      },
+      {
+        id: 26, title: "Young Adult Book 2", author: "Author Young Adult", cover: "https://covers.openlibrary.org/b/id/10331533-L.jpg", categories: ["Young Adult"], rating: 4.1, desc: "A recommended book for the Young Adult category.", reads: 600
+      },
+      {
+        id: 27, title: "Mindfulness Book 1", author: "Author Mindfulness", cover: "https://covers.openlibrary.org/b/id/10446805-L.jpg", categories: ["Mindfulness"], rating: 4.0, desc: "A recommended book for the Mindfulness category.", reads: 500
+      },
+      {
+        id: 28, title: "Mindfulness Book 2", author: "Author Mindfulness", cover: "https://covers.openlibrary.org/b/id/9195179-L.jpg", categories: ["Mindfulness"], rating: 4.1, desc: "A recommended book for the Mindfulness category.", reads: 600
+      },
+      {
+        id: 29, title: "Motivation Book 1", author: "Author Motivation", cover: "https://covers.openlibrary.org/b/id/12677553-L.jpg", categories: ["Motivation"], rating: 4.0, desc: "A recommended book for the Motivation category.", reads: 500
+      },
+      {
+        id: 30, title: "Motivation Book 2", author: "Author Motivation", cover: "https://covers.openlibrary.org/b/id/10467193-L.jpg", categories: ["Motivation"], rating: 4.1, desc: "A recommended book for the Motivation category.", reads: 600
+      },
+      {
+        id: 31, title: "Dystopian Book 1", author: "Author Dystopian", cover: "https://covers.openlibrary.org/b/id/12650070-L.jpg", categories: ["Dystopian"], rating: 4.0, desc: "A recommended book for the Dystopian category.", reads: 500
+      },
+      {
+        id: 32, title: "Dystopian Book 2", author: "Author Dystopian", cover: "https://covers.openlibrary.org/b/id/12610583-L.jpg", categories: ["Dystopian"], rating: 4.1, desc: "A recommended book for the Dystopian category.", reads: 600
+      },
+      {
+        id: 33, title: "Business Book 1", author: "Author Business", cover: "https://covers.openlibrary.org/b/id/10300111-L.jpg", categories: ["Business"], rating: 4.0, desc: "A recommended book for the Business category.", reads: 500
+      },
+      {
+        id: 34, title: "Business Book 2", author: "Author Business", cover: "https://covers.openlibrary.org/b/id/12684706-L.jpg", categories: ["Business"], rating: 4.1, desc: "A recommended book for the Business category.", reads: 600
+      },
+      {
+        id: 35, title: "Entrepreneurship Book 1", author: "Author Entrepreneurship", cover: "https://covers.openlibrary.org/b/id/9270321-L.jpg", categories: ["Entrepreneurship"], rating: 4.0, desc: "A recommended book for the Entrepreneurship category.", reads: 500
+      },
+      {
+        id: 36, title: "Entrepreneurship Book 2", author: "Author Entrepreneurship", cover: "https://covers.openlibrary.org/b/id/7773107-L.jpg", categories: ["Entrepreneurship"], rating: 4.1, desc: "A recommended book for the Entrepreneurship category.", reads: 600
+      },
+      {
+        id: 37, title: "Finance Book 1", author: "Author Finance", cover: "https://covers.openlibrary.org/b/id/12729477-L.jpg", categories: ["Finance"], rating: 4.0, desc: "A recommended book for the Finance category.", reads: 500
+      },
+      {
+        id: 38, title: "Finance Book 2", author: "Author Finance", cover: "https://covers.openlibrary.org/b/id/12602241-L.jpg", categories: ["Finance"], rating: 4.1, desc: "A recommended book for the Finance category.", reads: 600
+      },
+      {
+        id: 39, title: "Personal Growth Book 1", author: "Author Personal Growth", cover: "https://covers.openlibrary.org/b/id/12690526-L.jpg", categories: ["Personal Growth"], rating: 4.0, desc: "A recommended book for the Personal Growth category.", reads: 500
+      },
+      {
+        id: 40, title: "Personal Growth Book 2", author: "Author Personal Growth", cover: "https://covers.openlibrary.org/b/id/10076602-L.jpg", categories: ["Personal Growth"], rating: 4.1, desc: "A recommended book for the Personal Growth category.", reads: 600
+      },
+      {
+        id: 41, title: "Biography Book 1", author: "Author Biography", cover: "https://covers.openlibrary.org/b/id/12692014-L.jpg", categories: ["Biography"], rating: 4.0, desc: "A recommended book for the Biography category.", reads: 500
+      },
+      {
+        id: 42, title: "Biography Book 2", author: "Author Biography", cover: "https://covers.openlibrary.org/b/id/8301572-L.jpg", categories: ["Biography"], rating: 4.1, desc: "A recommended book for the Biography category.", reads: 600
+      },
+      {
+        id: 43, title: "Mystery Book 1", author: "Author Mystery", cover: "https://covers.openlibrary.org/b/id/12731448-L.jpg", categories: ["Mystery"], rating: 4.0, desc: "A recommended book for the Mystery category.", reads: 500
+      },
+      {
+        id: 44, title: "Mystery Book 2", author: "Author Mystery", cover: "https://covers.openlibrary.org/b/id/12680046-L.jpg", categories: ["Mystery"], rating: 4.1, desc: "A recommended book for the Mystery category.", reads: 600
+      },
+      // New Psychology Books for Trending Section
+      {
+        id: 45, title: "Influence: The Psychology of Persuasion", author: "Robert Cialdini", cover: "https://covers.openlibrary.org/b/id/10931527-L.jpg",
+        categories: ["Psychology", "Business"], rating: 4.7, desc: "A foundational book on the psychology of why people say yes and how to apply these understandings.", reads: 1600
+      },
+      {
+        id: 46, title: "Thinking, Fast and Slow 2", author: "Daniel Kahneman", cover: "https://covers.openlibrary.org/b/id/10321444-L.jpg",
+        categories: ["Science", "Psychology"], rating: 4.8, desc: "A sequel exploring more nuances of the two systems that drive the way we think.", reads: 1700
+      },
+    ];
+
+    // Book facts
+    const facts = [
+      "Books can increase your lifespan by up to 2 years if you read regularly!",
+      "The most expensive book ever purchased was Codex Leicester by Leonardo da Vinci, bought by Bill Gates for $30.8 million.",
+      "The longest novel ever written is 'In Search of Lost Time' by Marcel Proust, with 9.6 million characters.",
+      "Reading for just 6 minutes can reduce stress by 68%.",
+      "The first book ever written using a typewriter was 'The Adventures of Tom Sawyer'.",
+      "The largest library in the world is the Library of Congress in Washington, D.C.",
+      "The word 'bookworm' comes from actual insects that eat books.",
+      "The oldest known work of literature is the Epic of Gilgamesh.",
+      "The most translated book in the world is The Bible.",
+      "The first e-book was created in 1971 by Michael S. Hart."
+    ];
+    let factIdx = 0;
+
+    // Watchlist
+    let watchlist = [];
+
+    // User Score
+    let userScore = 0;
+    let userStats = {
+      types: {},
+      recommendations: 0,
+      watchlist: 0
+    };
+
+    // Render Functions
+    function renderBooks(section, filterFn) {
+      const grid = document.getElementById(section);
+      grid.innerHTML = '';
+      books.filter(filterFn).forEach(book => {
+        const inWatchlist = watchlist.includes(book.id);
+        grid.innerHTML += `
+          <div class="book-card" data-id="${book.id}">
+            <img class="book-cover" src="${book.cover}" alt="${book.title}">
+            <div class="book-title">${book.title}</div>
+            <div class="book-author">${book.author}</div>
+            <div class="book-categories">
+              ${book.categories.map(cat => `<span class="category-badge">${cat}</span>`).join('')}
+            </div>
+            <div class="rating">
+              <span class="star">&#9733;</span> ${book.rating}
+            </div>
+            <div class="book-desc">${book.desc}</div>
+            <button class="add-watchlist${inWatchlist ? ' added' : ''}" onclick="toggleWatchlist(${book.id}, this)" ${inWatchlist ? 'disabled' : ''}>
+              ${inWatchlist ? 'In Watchlist' : 'Add to Watchlist'}
+            </button>
+          </div>
+        `;
+      });
+    }
+
+    function renderWatchlistTableModal() {
+      const tbody = document.getElementById('watchlist-tbody-modal');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      if (watchlist.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="color:#888;text-align:center;">No books in your watchlist yet.</td></tr>';
+        return;
+      }
+      books.filter(b => watchlist.includes(b.id)).forEach(book => {
+        tbody.innerHTML += `
+          <tr>
+            <td><img src="${book.cover}" alt="${book.title}"></td>
+            <td>${book.title}</td>
+            <td>${book.author}</td>
+            <td>${book.categories.join(', ')}</td>
+            <td>${book.rating}</td>
+            <td><button onclick="removeFromWatchlist(${book.id});renderWatchlistTableModal();" style="background:var(--danger);color:#fff;border:none;border-radius:0.5em;padding:0.3em 0.8em;cursor:pointer;">Remove</button></td>
+          </tr>
+        `;
+      });
+    }
+
+    function removeFromWatchlist(id) {
+      watchlist = watchlist.filter(wid => wid !== id);
+      renderWatchlistTableModal();
+      filterBooks();
+    }
+
+    function renderTop4() {
+      const top4 = [...books].sort((a, b) => b.reads - a.reads).slice(0, 4);
+      const panel = document.getElementById('top4-list');
+      panel.innerHTML = '';
+      top4.forEach(book => {
+        panel.innerHTML += `
+          <div class="top4-item">
+            <img class="book-cover" src="${book.cover}" alt="${book.title}" style="width:60px;height:90px;">
+            <div style="font-weight:700;">${book.title}</div>
+            <div style="font-size:0.95em;">by ${book.author}</div>
+            <div style="font-size:0.9em;color:var(--secondary);">Reads: ${book.reads}</div>
+          </div>
+        `;
+      });
+    }
+
+    // Watchlist logic
+    function toggleWatchlist(id, btn) {
+      if (!watchlist.includes(id)) {
+        watchlist.push(id);
+        btn.classList.add('added');
+        btn.textContent = 'In Watchlist';
+        btn.disabled = true;
+        renderWatchlistTableModal();
+      }
+    }
+
+    // Search/filter logic
+    function filterBooks() {
+      const title = document.getElementById('search-title').value.toLowerCase();
+      const author = document.getElementById('search-author').value.toLowerCase();
+      const category = document.getElementById('search-category').value;
+      // Main
+      let mainBooks = books.filter(b => b.id <= 8 &&
+        (!title || b.title.toLowerCase().includes(title)) &&
+        (!author || b.author.toLowerCase().includes(author)) &&
+        (!category || b.categories.includes(category))
+      );
+      if (category && mainBooks.length < 2) {
+        mainBooks = books.filter(b => b.categories.includes(category)).slice(0, 2);
+      }
+      renderBooks('main-book-grid', b => mainBooks.includes(b));
+      // Trending
+      let trendingBooks = books.filter(b =>
+        ((b.id > 8 && b.id <= 24) || b.id === 45 || b.id === 46 || b.id === 12 || b.id === 17) && // Added b.id === 12 || b.id === 17
+        (!title || b.title.toLowerCase().includes(title)) &&
+        (!author || b.author.toLowerCase().includes(author)) &&
+        (!category || b.categories.includes(category))
+      );
+      if (category && trendingBooks.length < 2) {
+        trendingBooks = books.filter(b => b.categories.includes(category) && (((b.id > 8 && b.id <= 24) || b.id === 45 || b.id === 46) || b.id === 12 || b.id === 17)).slice(0, 2); // Added || b.id === 12 || b.id === 17
+      }
+      renderBooks('trending-book-grid', b => trendingBooks.includes(b));
+      // Watchlist
+      renderWatchlistTableModal();
+    }
+
+    // Book facts
+    function nextFact() {
+      factIdx = (factIdx + 1) % facts.length;
+      document.getElementById('book-fact').textContent = facts[factIdx];
+    }
+
+    // Login Modal
+    function showLoginModal() {
+      document.getElementById('login-modal-bg').style.display = 'flex';
+      document.getElementById('login-message').innerHTML = '';
+      document.getElementById('login-username').value = '';
+      document.getElementById('login-password').value = '';
+    }
+    function hideLoginModal() {
+      document.getElementById('login-modal-bg').style.display = 'none';
+    }
+    function loginUser(e) {
+      e.preventDefault();
+      const user = document.getElementById('login-username').value.trim();
+      const pass = document.getElementById('login-password').value.trim();
+      // Simulate successful login for any username/password
+      setTimeout(() => {
+        hideLoginModal();
+        isLoggedIn = true;
+        document.getElementById('login-btn').textContent = 'Logout';
+        showEventMessage('Login in successfully');
+      }, 300); // Short delay for effect
+      return false; // Prevent actual form submission
+    }
+
+    // Login/Logout Logic
+    let isLoggedIn = false;
+    function handleLoginLogout() {
+      if (!isLoggedIn) {
+        showLoginModal();
+      } else {
+        isLoggedIn = false;
+        document.getElementById('login-btn').textContent = 'Login';
+        showEventMessage('Logged out');
+      }
+    }
+    function showEventMessage(msg) {
+      let evt = document.getElementById('event-message');
+      if (!evt) {
+        evt = document.createElement('div');
+        evt.id = 'event-message';
+        evt.style.position = 'fixed';
+        evt.style.top = '1.5rem';
+        evt.style.left = '50%';
+        evt.style.transform = 'translateX(-50%)';
+        evt.style.background = 'linear-gradient(90deg, var(--secondary), var(--accent))';
+        evt.style.color = '#fff';
+        evt.style.padding = '0.7em 2em';
+        evt.style.borderRadius = '0.7em';
+        evt.style.fontWeight = '700';
+        evt.style.fontSize = '1.1em';
+        evt.style.zIndex = '2000';
+        document.body.appendChild(evt);
+      }
+      evt.textContent = msg;
+      evt.style.display = 'block';
+      setTimeout(() => { evt.style.display = 'none'; }, 2000);
+    }
+
+    // Ensure at least 2 books per category in dropdown
+    const allCategories = [
+      "Self-Help", "Productivity", "Fiction", "Adventure", "Classic", "Drama", "Fantasy", "Young Adult", "Spirituality", "Mindfulness", "History", "Non-Fiction", "Motivation", "Dystopian", "Business", "Entrepreneurship", "Finance", "Personal Growth", "Science", "Psychology", "Biography", "Mystery"
+    ];
+    // Add extra books if needed
+    allCategories.forEach(cat => {
+      const found = books.filter(b => b.categories.includes(cat));
+      if (found.length < 2) {
+        for (let i = found.length; i < 2; i++) {
+          books.push({
+            id: books.length + 1,
+            title: `${cat} Book ${i+1}`,
+            author: `Author ${cat}`,
+            cover: "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=400&q=80",
+            categories: [cat],
+            rating: 4.0 + 0.1 * i,
+            desc: `A recommended book for the ${cat} category.`,
+            reads: 500 + 100 * i
+          });
+        }
+      }
+    });
+
+    // Initial render
+    renderBooks('main-book-grid', b => b.id <= 8);
+    renderBooks('trending-book-grid', b => (b.id > 8 && b.id <= 24) || b.id === 45 || b.id === 46 || b.id === 12 || b.id === 17); // Added b.id === 12 || b.id === 17
+    renderWatchlistTableModal();
+    renderTop4();
+
+    // --- Review System ---
+    // Populate review category dropdown
+    function populateReviewCategories() {
+      const catSel = document.getElementById('review-category');
+      if (!catSel) return;
+      catSel.innerHTML = '<option value="">Select Category</option>';
+      allCategories.forEach(cat => {
+        catSel.innerHTML += `<option value="${cat}">${cat}</option>`;
+      });
+    }
+    // Show/hide review form page
+    function showReviewFormPage() {
+      document.getElementById('container').style.display = 'none';
+      document.getElementById('review-form-page').style.display = 'block';
+      window.scrollTo(0,0);
+    }
+    function hideReviewFormPage() {
+      document.getElementById('container').style.display = '';
+      document.getElementById('review-form-page').style.display = 'none';
+    }
+    // Review storage
+    function getReviews() {
+      return JSON.parse(localStorage.getItem('bookera_reviews') || '[]');
+    }
+    function saveReview(review) {
+      const reviews = getReviews();
+      reviews.unshift(review);
+      localStorage.setItem('bookera_reviews', JSON.stringify(reviews));
+    }
+    function renderReviews() {
+      const reviews = getReviews();
+      const list = document.getElementById('published-reviews-list');
+      if (!list) return;
+      if (reviews.length === 0) {
+        list.innerHTML = '<div style="color:#888;text-align:center;">No reviews published yet.</div>';
+        return;
+      }
+      list.innerHTML = reviews.map(r => `
+        <div style="background:var(--glass);border-radius:1em;padding:1.2em 1em;box-shadow:0 2px 8px #0ea5e944;">
+          <div style="font-weight:700;font-size:1.1em;color:var(--secondary);margin-bottom:0.3em;">${r.bookName}</div>
+          <div style="font-size:0.98em;color:var(--muted);margin-bottom:0.2em;">by ${r.author} | <span style="color:var(--accent);">${r.category}</span></div>
+          <div style="margin-bottom:0.5em;">${r.views.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+          <div style="color:var(--secondary);font-weight:600;">Rating: ${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
+        </div>
+      `).join('');
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('review-form').onsubmit = function(e) {
+        e.preventDefault();
+        const bookName = document.getElementById('review-book-name').value.trim();
+        const author = document.getElementById('review-author').value.trim();
+        const category = document.getElementById('review-category').value;
+        const views = document.getElementById('review-views').value.trim();
+        const rating = parseInt(document.getElementById('review-rating').value);
+        if (!bookName || !author || !category || !views || !rating) return;
+        saveReview({ bookName, author, category, views, rating });
+        renderReviews();
+        hideReviewFormPage();
+        showEventMessage('Review published!');
+        this.reset();
+      };
+      document.getElementById('cancel-review-btn').onclick = function() {
+        hideReviewFormPage();
+      };
+      document.getElementById('write-review-nav').onclick = function() {
+        populateReviewCategories();
+        showReviewFormPage();
+      };
+      // Initial render for reviews
+      renderReviews();
+    });
+
+    // --- Publish Reviews Button Logic ---
+    const publishBtn = document.getElementById('publish-reviews-fixed-btn');
+    const reviewPublishPage = document.getElementById('review-publish-page');
+    const reviewPublishForm = document.getElementById('review-publish-form');
+    const pubCancelBtn = document.getElementById('pub-cancel-btn');
+    const pubReviewResult = document.getElementById('pub-review-result');
+    if (publishBtn && reviewPublishPage && reviewPublishForm && pubCancelBtn) {
+      publishBtn.onclick = () => {
+        reviewPublishPage.style.display = 'flex';
+        pubReviewResult.innerHTML = '';
+        reviewPublishForm.reset();
+      };
+      pubCancelBtn.onclick = () => {
+        reviewPublishPage.style.display = 'none';
+        pubReviewResult.innerHTML = '';
+        reviewPublishForm.reset();
+      };
+      reviewPublishForm.onsubmit = function(e) {
+        e.preventDefault();
+        const bookName = document.getElementById('pub-book-name').value.trim();
+        const authorName = document.getElementById('pub-author-name').value.trim();
+        const rating = document.querySelector('input[name="pub-rating"]:checked')?.value;
+        const views = document.getElementById('pub-views').value.trim();
+        if (!bookName || !authorName || !rating || !views) return;
+        // Save review to localStorage and update Published Reviews section
+        saveReview({ bookName, author: authorName, category: '', views, rating: parseInt(rating) });
+        renderReviews();
+        // Display formatted review below the form (optional, can remove if not needed)
+        pubReviewResult.innerHTML = `<div style=\"background:var(--glass);border-radius:1em;padding:1.2em 1em;box-shadow:0 2px 8px #0ea5e944;margin-top:1em;\"><div style=\"font-weight:700;font-size:1.1em;color:var(--secondary);margin-bottom:0.3em;\">${bookName}</div><div style=\"font-size:0.98em;color:var(--muted);margin-bottom:0.2em;\">by ${authorName}</div><div style=\"margin-bottom:0.5em;\">${views.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div><div style=\"color:var(--secondary);font-weight:600;\">Rating: ${'★'.repeat(rating)}${'☆'.repeat(5-rating)}</div></div>`;
+        // Also log to console for demo
+        console.log({ bookName, authorName, rating, views });
+        this.reset();
+      };
+    }
+
+    // Watchlist Modal open/close logic
+    const watchlistBtn = document.getElementById('watchlist-btn');
+    const watchlistModal = document.getElementById('watchlist-modal');
+    const closeWatchlistModal = document.getElementById('close-watchlist-modal');
+    if (watchlistBtn && watchlistModal && closeWatchlistModal) {
+      watchlistBtn.onclick = function() {
+        watchlistModal.style.display = 'flex';
+        renderWatchlistTableModal();
+      };
+      closeWatchlistModal.onclick = function() {
+        watchlistModal.style.display = 'none';
+      };
+    }
+  </script>
+</body>
+</html>
